@@ -11,7 +11,7 @@ export default async function handler(req, res) {
           name,
         },
       });
-      res.status(200).json({ user: newFirm, error: null });
+      res.status(200).json(newFirm);
     } catch (error) {
       res.status(500).json({ error: error.message, firm: null });
     }

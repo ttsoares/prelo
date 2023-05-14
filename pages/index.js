@@ -7,11 +7,9 @@ import logo from "/public/imgs/logo2.png";
 import Head from "next/head";
 import css from "../styles/Home.module.css";
 
-//import usersArray from "./api/json/users.json";
-
 //-------------------------------
 export default function Home() {
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [modal, setModal] = useState(false);
 
@@ -20,7 +18,7 @@ export default function Home() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const apiResponse = await fetch(`/api/user/recover/?name=${username}`);
+    const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
     const userExists = await apiResponse.json();
 
     const hashInput = md5(password);
@@ -31,11 +29,10 @@ export default function Home() {
         setModal(false);
       }, 3000);
     } else {
-      if (userExists.type === "ADMIN") {
-        // router.push("/dashboard");
+      if (userExists.role === "ADMIN") {
+        router.push("/dashboard");
       } else {
-        // router.push(`/dashboard/${userExists.id}`);
-        console.log("LOGOU !!!");
+        router.push(`/dashboard/${userExists.id}`);
       }
     }
   };
@@ -65,8 +62,8 @@ export default function Home() {
                 className={css.input_input}
                 type="text"
                 id="username"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
+                value={userName}
+                onChange={(event) => setUserName(event.target.value)}
                 required
               />
             </div>

@@ -1,25 +1,36 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-
 import css from "./firm.module.css";
-
-import firmsArray from "../api/json/firms.json";
 
 //------------------------------
 export default function Firm() {
   const [firmName, setFirmName] = useState("");
+  const [saved, setSaved] = useState(false);
 
   const router = useRouter();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const firmExists = firmsArray.find((firm) => firm.name === firmName);
+    const apiResponse = await fetch(`/api/firm/recName/?firmName=${firmName}`);
+    const firmExists = await apiResponse.json();
 
     if (!firmExists) {
-      saveData(firmName);
-    }
+      const newFirm = { name: firmName };
 
+      const apiRespSave = await fetch(`/api/firm/create`, {
+        method: "POST",
+        ContentType: "application/json",
+        body: JSON.stringify(newFirm),
+      });
+
+      const firmSaved = await apiRespSave.json();
+      if (firmSaved.id) {
+        setSaved(true);
+        setTimeout(() => {}, 3000);
+      }
+      setSaved(false);
+    }
     router.push(`/dashboard/`);
   };
 
@@ -52,20 +63,11 @@ export default function Firm() {
           </button>
         </div>
       </form>
+      {saved && (
+        <div className={css.modal}>
+          <h2>Firm saved successfully</h2>
+        </div>
+      )}
     </div>
   );
 }
-
-const saveData = async (firmName) => {
-  const firmObj = {
-    name: firmName,
-  };
-
-  const response = await fetch("/api/storeJSONFirms", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(firmObj),
-  });
-};

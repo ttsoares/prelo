@@ -29,6 +29,12 @@
   background-color: aqua;
 }
 
+.firmName {
+  color: #842f05;
+  font-size: 1.3rem;
+  font-weight: bolder;
+}
+
 .buttons {
   display: flex;
   justify-content: space-between;

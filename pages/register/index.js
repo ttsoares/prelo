@@ -4,11 +4,9 @@ import md5 from "md5";
 
 import css from "./register.module.css";
 
-//import usersArray from "../api/json/users.json";
-
 //----------------------------------
 export default function Register() {
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [modalPass, setModalPass] = useState(false);
@@ -22,7 +20,7 @@ export default function Register() {
 
     let flagAllOK = true;
 
-    const apiResponse = await fetch(`/api/user/recover/?name=${username}`);
+    const apiResponse = await fetch(`/api/user/recover/?name=${userName}`);
     const userExists = await apiResponse.json();
 
     if (userExists !== null) {
@@ -39,7 +37,7 @@ export default function Register() {
 
     if (flagAllOK) {
       const newUser = {
-        name: username,
+        name: userName,
         password: md5(password1),
       };
 
@@ -81,8 +79,8 @@ export default function Register() {
                 className={css.input_input}
                 type="text"
                 id="username"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
+                value={userName}
+                onChange={(event) => setUserName(event.target.value)}
                 required
               />
             </div>
@@ -108,7 +106,7 @@ export default function Register() {
                 required
               />
             </div>
-            <button className={css.input_button} type="submit">
+            <button className={css.submit_button} type="submit">
               Submit
             </button>
           </form>
@@ -159,15 +157,3 @@ export default function Register() {
     </div>
   );
 }
-
-const saveData = async (newUser) => {
-  const response = await fetch("/api/storeJSONUsers", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newUser),
-  });
-  const data = await response.json();
-  return data;
-};

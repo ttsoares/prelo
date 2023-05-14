@@ -1,16 +1,16 @@
 import prisma from "../../../../lib/prisma";
 
 export default async function handler(req, res) {
-  if (req.method === "DELETE") {
-    const { taskId } = req.query;
+  if (req.method === "GET") {
+    const { userId } = req.query;
 
     try {
-      const taskDeleted = await prisma.task.delete({
+      const getUser = await prisma.user.findUnique({
         where: {
-          id: taskId,
+          id: userId,
         },
       });
-      res.status(200).json(taskDeleted);
+      res.status(200).json(getUser);
     } catch (error) {
       res.status(500).json({ error: error.message, user: null });
     }

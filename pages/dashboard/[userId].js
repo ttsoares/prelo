@@ -6,59 +6,40 @@ import DelModal from "../components/delModal";
 import css from "./dashboard.module.css";
 import Card from "../components/card";
 
-//TODO Muda isso para buscar na API
-import usersArray from "../api/json/users.json";
-import tasksArray from "../api/json/tasks.json";
-import firmsArray from "../api/json/firms.json";
-
-//-------------------------------------
-export default function DashboardID() {
-  const [ownerId, setOwnerId] = useState(0);
-  const [ownerName, setOwnerName] = useState("");
+//------------------------------------- recebe user ID
+export default function DashboardUser() {
   const [editModal, setEditModal] = useState(false);
   const [delModal, setDelModal] = useState(false);
+  //Tasks states
   const [delTaskContent, setDelTaskContent] = useState({});
   const [delTaskId, setDelTaskId] = useState({});
   const [editTask, setEditTask] = useState({});
-  const [allTasks, setAllTasks] = useState(tasksArray);
-  const [allUsers, setAllUsers] = useState(usersArray);
+  //User states
+  const [logedUser, setLogedUser] = useState({});
+  const [userTasks, setUserTasks] = useState([]);
 
   const router = useRouter();
 
   useEffect(() => {
     if (router.isReady) {
-      const sentOwnerId = router.query.id;
-      setOwnerId(sentOwnerId);
-      const foundOwnerName = allUsers.find(
-        (task) => Number(task.id) === Number(sentOwnerId)
-      ).name;
-
-      setOwnerName(foundOwnerName);
+      getUser(router.query.userId);
     }
-  }, [allUsers, router.isReady, router.query.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady, router.query.userId]);
 
   useEffect(() => {
-    getTasks();
+    getTasks(logedUser.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModal, delModal]);
 
   useEffect(() => {
-    getTasks();
+    getTasks(logedUser.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const tasksOwned = allTasks.filter(
-    (task) => Number(task.owner) === Number(ownerId)
-  );
-
-  tasksOwned.sort(function (a, b) {
-    var c = new Date(a.date);
-    var d = new Date(b.date);
-    return d - c;
-  });
 
   function toggleEditModal() {
     setEditModal(!editModal);
   }
-
   function editingTask(task) {
     setEditTask(task);
     toggleEditModal();
@@ -67,39 +48,41 @@ export default function DashboardID() {
   function toggleDelModal() {
     setDelModal(!delModal);
   }
-  function removeTask(taskId) {
+  async function removeTask(taskId) {
     setDelTaskId(taskId);
-    setDelTaskContent(
-      allTasks.find((task) => Number(task.id) === Number(taskId)).content
-    );
+    const content = userTasks.find((task) => task.id === taskId).content;
+    setDelTaskContent(content);
     toggleDelModal(true);
   }
 
   async function getTasks() {
-    await fetch("/api/storeJSONTasks")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setAllTasks(data);
-      });
+    const apiResponse = await fetch(`/api/task/recOneUser/?${logedUser.id}`);
+    const tasksArray = await apiResponse.json();
+    setUserTasks(tasksArray);
+  }
+  async function getUser(userId) {
+    const apiResponse = await fetch(`/api/user/recoverId/?userId=${userId}`);
+    const gotUser = await apiResponse.json();
+    setLogedUser(gotUser);
   }
 
   return (
     <div className={css.container}>
       <h1>
-        DashBoard of <span className={css.userName}>{ownerName}</span>
+        DashBoard of <span className={css.userName}>{logedUser.name}</span>
       </h1>
-      {tasksOwned.map((task, index) => (
+      {userTasks.map((task, index) => (
         <div className={css.wrapp_cards} key={index}>
           <div onClick={() => editingTask(task)}>
-            <Card admin={false} content={task.content} date={task.date} />
+            <Card admin={false} content={task.content} date={task.updatedAt} />
           </div>
           <div
-            onClick={() => router.push(`/dashOneFirm/${ownerId}/${task.firm}`)}
+            onClick={() =>
+              router.push(`/dashOneFirm/${logedUser.id}/${task.firmId}`)
+            }
             className={css.firm}
           >
-            {task.firm}
+            {task.firm.name}
           </div>
           <button onClick={() => removeTask(task.id)} className={css.btn_del}>
             DELETE
@@ -109,7 +92,7 @@ export default function DashboardID() {
       <div className={css.buttons}>
         <button
           className={css.submit_button}
-          onClick={() => router.push(`/newTask/${ownerId}`)}
+          onClick={() => router.push(`/newTask/${logedUser.id}`)}
         >
           New Task
         </button>

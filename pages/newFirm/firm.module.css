@@ -27,6 +27,13 @@
   width: 90%;
 }
 
+.modal {
+  padding: 1rem;
+  border: 1px red solid;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
 .buttons {
   display: flex;
   justify-content: space-between;

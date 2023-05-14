@@ -1,44 +1,38 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import css from "./dashboard.module.css";
 import Card from "../components/card";
 
-import tasksArray from "../api/json/tasks.json";
-import usersArray from "../api/json/users.json";
-
 //-----------------------------------
 export default function Dashboard() {
-  tasksArray.sort(function (a, b) {
-    var c = new Date(a.date);
-    var d = new Date(b.date);
-    return d - c;
-  });
+  const [allTasks, setAllTasks] = useState([]);
+
+  useEffect(() => {
+    getTasks();
+  }, []);
 
   const router = useRouter();
 
-  const tasksWithNames = tasksArray.map((task) => {
-    const user = usersArray.find(
-      (user) => Number(user.id) === Number(task.owner)
-    );
-    if (user.id > 0) {
-      return { ...task, ownerName: user.name };
-    }
-  });
+  async function getTasks() {
+    const apiResponse = await fetch(`/api/task/recAll`);
+    const tasksArray = await apiResponse.json();
+    setAllTasks(tasksArray);
+  }
 
   return (
     <>
       <div className={css.container}>
         <h1>DashBoard All Tasks</h1>
-
-        {tasksWithNames.map((task, index) => {
+        {allTasks.map((task, index) => {
           return (
             <Card
               admin={true}
               key={index}
-              userName={task.ownerName}
+              userName={task.owner.name}
               content={task.content}
-              date={task.date}
-              sudo={() => router.push(`/dashboard/${task.owner}`)}
+              date={task.updatedAt}
+              sudo={() => router.push(`/dashboard/${task.ownerId}`)}
             />
           );
         })}

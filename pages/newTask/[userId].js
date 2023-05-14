@@ -4,53 +4,58 @@ import { useRouter } from "next/router";
 
 import css from "./newTask.module.css";
 
-//TODO Muda isso para buscar na API
-import usersArray from "../api/json/users.json";
-import tasksArray from "../api/json/tasks.json";
-import firmsArray from "../api/json/firms.json";
-
-const optionsList = firmsArray.map((firm) => {
-  const obj = { value: String(firm.id), label: firm.name };
-  return obj;
-});
-
 //-------------------------------------- recebe userID
 export default function NewTask() {
+  const [selectedFirm, setSelectedFirm] = useState({ value: "", label: "" });
   const [taskCont, setTaskCont] = useState([]);
-  const [ownerId, setOwnerId] = useState(0);
-  const [ownerName, setOwnerName] = useState("");
-  const [selectedFirm, setSelectedFirm] = useState("");
-  const [allTasks, setAllTasks] = useState(tasksArray);
-  const [allUsers, setAllUsers] = useState(usersArray);
+  const [optionsList, setOptionsList] = useState([]); //Para o Select
+  const [logedUser, setLogedUser] = useState({});
 
   const router = useRouter();
 
   useEffect(() => {
     if (router.isReady) {
-      const userId = Number(router.query.id);
-
-      const foundOwnerName = allUsers.find((user) => user.id == userId).name;
-
-      setOwnerId(userId);
-      setOwnerName(foundOwnerName);
+      getUser(router.query.userId);
+      getFirms();
     }
-  }, [router.isReady, router.query.id, allUsers]);
+  }, [router.isReady, router.query.userId]);
 
-  const taskDate = new Date().toLocaleDateString("pt-BR");
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
     const newTask = {
-      id: 0,
-      owner: ownerId,
+      ownerId: logedUser.id,
       content: taskCont,
-      date: taskDate,
-      firm: selectedFirm.label,
+      firmId: selectedFirm.value,
     };
 
-    saveData(newTask);
-    router.push(`/dashboard/${ownerId}`);
+    const apiRespSave = await fetch(`/api/task/create`, {
+      method: "POST",
+      ContentType: "application/json",
+      body: JSON.stringify(newTask),
+    });
+
+    router.push(`/dashboard/${logedUser.id}`);
   };
+
+  async function getUser(userId) {
+    const apiResponse = await fetch(`/api/user/recoverId/?userId=${userId}`);
+    const gotUser = await apiResponse.json();
+    console.log("Got User", gotUser);
+    setLogedUser(gotUser);
+  }
+
+  async function getFirms() {
+    const apiResponse = await fetch("/api/firm/recAll");
+    const firmsArray = await apiResponse.json();
+
+    // Cria o array com 'value' e 'label' como exige o <Select/>
+    const options = firmsArray.map((firm) => {
+      return { value: firm.id, label: firm.name };
+    });
+
+    setOptionsList(options);
+  }
 
   function handleSelect(data) {
     setSelectedFirm(data);
@@ -73,7 +78,7 @@ export default function NewTask() {
           <div className={css.select_container}>
             <Select
               options={optionsList}
-              placeholder="Choose Firm"
+              placeholder="Choose a Firm"
               value={selectedFirm}
               onChange={handleSelect}
               isSearchable={true}
@@ -87,7 +92,7 @@ export default function NewTask() {
           <button
             type="button"
             className={css.cancel_button}
-            onClick={() => router.push(`/dashboard/${ownerId}`)}
+            onClick={() => router.push(`/dashboard/${logedUser.id}`)}
           >
             Cancel
           </button>
@@ -96,13 +101,3 @@ export default function NewTask() {
     </div>
   );
 }
-
-const saveData = async (newTask) => {
-  const response = await fetch("/api/storeJSONTasks", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newTask),
-  });
-};

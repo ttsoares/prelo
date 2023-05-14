@@ -6,16 +6,19 @@ import css from "./editModal.module.css";
 export default function EditModal({ content, task, closeModal }) {
   const [editContent, setEditContent] = useState(content);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const editedTask = {
-      id: task.id,
-      owner: task.owner,
+      taskId: task.id,
       content: editContent,
-      date: task.date,
     };
 
-    saveData(editedTask);
+    const apiRespUpdt = await fetch(`/api/task/update`, {
+      method: "PUT",
+      ContentType: "application/json",
+      body: JSON.stringify(editedTask),
+    });
+
     closeModal();
   };
 
@@ -54,13 +57,3 @@ export default function EditModal({ content, task, closeModal }) {
     </div>
   );
 }
-
-const saveData = async (editContent) => {
-  const response = await fetch("/api/storeJSONTasks", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(editContent),
-  });
-};

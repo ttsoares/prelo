@@ -2,9 +2,13 @@ import css from "./delModal.module.css";
 
 //----------------------------------------------------
 export default function DelModal({ content, taskId, closeModal }) {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    fetch(`/api/delTask/${taskId}`);
+
+    const apiResponse = await fetch(`/api/task/delete/?taskId=${taskId}`, {
+      method: "DELETE",
+    });
+
     closeModal();
   };
 
@@ -13,7 +17,7 @@ export default function DelModal({ content, taskId, closeModal }) {
       <div className={css.overlay}></div>
       <div className={css.modal_content}>
         <h2>Remvove Task</h2>
-        <form className={css.input_form} onSubmit={handleSubmit}>
+        <form className={css.input_form} onClick={handleSubmit}>
           <div className={css.form_group}>
             <textarea
               readOnly
