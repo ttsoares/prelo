@@ -20,7 +20,7 @@ export default function Register() {
 
     let flagAllOK = true;
 
-    const apiResponse = await fetch(`/api/user/recover/?name=${userName}`);
+    const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
     const userExists = await apiResponse.json();
 
     if (userExists !== null) {
@@ -40,6 +40,8 @@ export default function Register() {
         name: userName,
         password: md5(password1),
       };
+
+      console.log(newUser);
 
       const apiRespSave = await fetch(`/api/user/create`, {
         method: "POST",
