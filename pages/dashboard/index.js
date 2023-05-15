@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import css from "./dashboard.module.css";
-import Card from "../components/card";
+import Card from "/components/card";
 
 //-----------------------------------
 export default function Dashboard() {

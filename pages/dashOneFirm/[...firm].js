@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import EditModal from "../components/editModal";
-import DelModal from "../components/delModal";
+import EditModal from "/components/editModal";
+import DelModal from "/components/delModal";
 
 import css from "./oneFirm.module.css";
-import Card from "../components/card";
+import Card from "/components/card";
 
 // Dashboard to one user and one firm
 //-------------------------------- get user ID and firm ID
