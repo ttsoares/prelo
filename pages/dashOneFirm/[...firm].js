@@ -45,15 +45,10 @@ export default function DashOneFirm() {
     }
   }, [router.isReady, router.query.firm]);
 
-  // useEffect(() => {
-  //   getTasks(usrIdTaskId);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [editModal, delModal]);
-
-  // useEffect(() => {
-  //   getTasks(usrIdTaskId);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    getTasks(usrIdTaskId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editModal, delModal]);
 
   function toggleEditModal() {
     setEditModal(!editModal);

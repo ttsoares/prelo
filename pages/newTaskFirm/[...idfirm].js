@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import css from "./newTaskFirm.module.css";
 
-//-------------------------------------- receive userID & firmName
+//-------------------------------------- receive user ID & firm name
 export default function NewTarkFirm() {
   const [taskCont, setTaskCont] = useState([]);
   const [selectedFirm, setSelectedFirm] = useState({});
@@ -23,9 +23,16 @@ export default function NewTarkFirm() {
     const newTask = {
       ownerId: logedUser.id,
       content: taskCont,
-      firm: selectedFirm.id,
+      firmId: selectedFirm.id,
     };
-    router.push(`/dasOneFirm/${logedUser.id}/${selectedFirm.name}`);
+
+    const apiRespSave = await fetch(`/api/task/create`, {
+      method: "POST",
+      ContentType: "application/json",
+      body: JSON.stringify(newTask),
+    });
+
+    router.push(`/dashOneFirm/${logedUser.id}/${selectedFirm.id}`);
   };
 
   async function getUser(userId) {
@@ -64,7 +71,7 @@ export default function NewTarkFirm() {
             type="button"
             className={css.cancel_button}
             onClick={() =>
-              router.push(`/dashOneFirm/${logedUser.id}/${selectedFirm.name}`)
+              router.push(`/dashOneFirm/${logedUser.id}/${selectedFirm.id}`)
             }
           >
             Cancel
