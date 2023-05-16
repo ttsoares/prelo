@@ -4,6 +4,8 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     const { name } = req.query;
 
+    console.log(">>>>>>>", name);
+
     try {
       const getUser = await prisma.user.findUnique({
         where: {
