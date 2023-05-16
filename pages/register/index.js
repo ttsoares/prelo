@@ -26,11 +26,7 @@ export default function Register() {
 
     let flagAllOK = true;
 
-    console.log("ANTES DO FETCH");
-
-    const apiResponse = await fetch(
-      `https://prelo.vercel.app/api/user/recoverName/?name=${userName}`
-    );
+    const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
     const userExists = await apiResponse.json();
 
     if (userExists !== null) {
@@ -49,14 +45,11 @@ export default function Register() {
         password: md5(password1),
       };
 
-      const apiRespSave = await fetch(
-        `https://prelo.vercel.app/api/user/create`,
-        {
-          method: "POST",
-          ContentType: "application/json",
-          body: JSON.stringify(newUser),
-        }
-      );
+      const apiRespSave = await fetch(`/api/user/create`, {
+        method: "POST",
+        ContentType: "application/json",
+        body: JSON.stringify(newUser),
+      });
 
       const userSaved = await apiRespSave.json();
       if (userSaved.id) {
