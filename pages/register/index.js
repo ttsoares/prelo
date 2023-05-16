@@ -29,7 +29,7 @@ export default function Register() {
     const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
     const userExists = await apiResponse.json();
 
-    console.log(">>>>>", userExists);
+    console.log(">>>>>", userExists.user);
 
     if (userExists !== null) {
       flagAllOK = false;
