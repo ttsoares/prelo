@@ -26,6 +26,8 @@ export default function Register() {
 
     let flagAllOK = true;
 
+    console.log("ANTES DO FETCH");
+
     const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
     const userExists = await apiResponse.json();
 
