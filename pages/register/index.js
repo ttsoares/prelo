@@ -15,6 +15,12 @@ export default function Register() {
 
   const router = useRouter();
 
+  function reset() {
+    setModalPass(false);
+    setModalUser(false);
+    router.push("/register");
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -24,13 +30,11 @@ export default function Register() {
     const userExists = await apiResponse.json();
 
     if (userExists !== null) {
-      // TODO impedir que reuse o botão submit
       flagAllOK = false;
       setModalUser(true);
     }
 
     if (password1 !== password2) {
-      // TODO impedir que reuse o botão submit
       flagAllOK = false;
       setModalPass(true);
     }
@@ -58,12 +62,6 @@ export default function Register() {
       }
     }
   };
-
-  function reset() {
-    setModalPass(false);
-    setModalUser(false);
-    router.push("/register");
-  }
 
   return (
     <div className={css.container}>
