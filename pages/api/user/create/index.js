@@ -2,6 +2,8 @@ import prisma from "../../../../lib/prisma";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
+    console.log("CRIANDO USUARIO");
+
     const { name, password, role } =
       typeof req.body == "string" ? JSON.parse(req.body) : req.body;
 

@@ -45,8 +45,6 @@ export default function Register() {
         password: md5(password1),
       };
 
-      console.log(newUser);
-
       const apiRespSave = await fetch(`/api/user/create`, {
         method: "POST",
         ContentType: "application/json",
