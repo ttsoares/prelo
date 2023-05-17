@@ -19,14 +19,11 @@ export default function Home() {
     event.preventDefault();
 
     const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
-
-    console.log(apiResponse);
-
     const userExists = await apiResponse.json();
 
     const hashInput = md5(password);
 
-    if (userExists.user === null || userExists.password !== hashInput) {
+    if (userExists === null || userExists.password !== hashInput) {
       setModal(true);
       setTimeout(() => {
         setModal(false);

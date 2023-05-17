@@ -86,7 +86,14 @@
   cursor: pointer;
 }
 
-.modal {
+.modal_ok {
+  padding: 1rem;
+  border: 1px green solid;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.modal_err {
   padding: 1rem;
   border: 1px red solid;
   border-radius: 10px;

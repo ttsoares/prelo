@@ -27,18 +27,19 @@ export default function Register() {
     let flagAllOK = true;
 
     const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
-    const userExistsDB = await apiResponse.json();
 
-    //Object { error: "No User found", user: null }
-
-    if (!userExistsDB.error) {
+    if (apiResponse.status === 200) {
       flagAllOK = false;
       setModalUser(true);
+      return;
     }
 
-    if (password1 !== password2) {
-      flagAllOK = false;
-      setModalPass(true);
+    if (apiResponse.status === 500) {
+      if (password1 !== password2) {
+        flagAllOK = false;
+        setModalPass(true);
+        return;
+      }
     }
 
     if (flagAllOK) {
@@ -116,7 +117,7 @@ export default function Register() {
         </div>
 
         {modalPass && (
-          <div className={css.modal}>
+          <div className={css.modal_err}>
             <h3>Passwords not equal !</h3>
 
             <div className={css.buttons}>
@@ -134,7 +135,7 @@ export default function Register() {
           </div>
         )}
         {modalUser && (
-          <div className={css.modal}>
+          <div className={css.modal_err}>
             <h3>Username already exists !</h3>
 
             <div className={css.buttons}>
@@ -152,7 +153,7 @@ export default function Register() {
           </div>
         )}
         {saved && (
-          <div className={css.modal}>
+          <div className={css.modal_ok}>
             <h2>User saved successfully</h2>
           </div>
         )}
