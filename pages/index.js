@@ -19,6 +19,9 @@ export default function Home() {
     event.preventDefault();
 
     const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
+
+    console.log(apiResponse);
+
     const userExists = await apiResponse.json();
 
     const hashInput = md5(password);
