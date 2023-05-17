@@ -82,8 +82,10 @@ export default function NewTask() {
               value={selectedFirm}
               onChange={handleSelect}
               isSearchable={true}
+              className={css.select}
             />
           </div>
+          <h3>Choose a Firm</h3>
         </div>
         <div className={css.buttons}>
           <button className={css.submit_button} type="submit">

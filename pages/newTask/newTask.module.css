@@ -29,6 +29,11 @@
   background-color: aqua;
 }
 
+.select {
+  color: rebeccapurple;
+  font-weight: bold;
+}
+
 .buttons {
   display: flex;
   justify-content: space-between;
