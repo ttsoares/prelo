@@ -23,7 +23,7 @@ export default function Home() {
 
     const hashInput = md5(password);
 
-    if (userExists === null || userExists.password !== hashInput) {
+    if (userExists.user === null || userExists.password !== hashInput) {
       setModal(true);
       setTimeout(() => {
         setModal(false);
