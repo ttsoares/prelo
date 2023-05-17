@@ -26,32 +26,24 @@ export default function Register() {
 
     let flagAllOK = true;
 
-    try {
-      await fetch(`/api/user/recoverName/?name=${userName}`);
-      flagAllOK = false;
-      setModalUser(true);
-      return;
-    } catch (error) {
-      if (password1 !== password2) {
-        flagAllOK = false;
-        setModalPass(true);
-        return;
-      }
-    }
-
-    // if (apiResponse.status === 200) {
+    // try {
+    //   await fetch(`/api/user/recoverName/?name=${userName}`);
     //   flagAllOK = false;
     //   setModalUser(true);
     //   return;
-    // }
-
-    // if (apiResponse.status === 500) {
+    // } catch (error) {
     //   if (password1 !== password2) {
     //     flagAllOK = false;
     //     setModalPass(true);
     //     return;
     //   }
     // }
+
+    if (password1 !== password2) {
+      flagAllOK = false;
+      setModalPass(true);
+      return;
+    }
 
     if (flagAllOK) {
       const newUser = {
