@@ -1,15 +1,16 @@
 import prisma from "../../../../lib/prisma";
 
 export default async function handler(req, res) {
+  const { userId } = req.query;
+
   if (req.method === "GET") {
-    const { userId } = req.query;
     try {
       const taskList = await prisma.task.findMany({
         where: {
           ownerId: userId,
         },
         orderBy: {
-          createdAt: "desc",
+          updatedAt: "asc",
         },
         include: {
           firm: {

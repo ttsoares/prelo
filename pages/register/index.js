@@ -27,12 +27,11 @@ export default function Register() {
     let flagAllOK = true;
 
     const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
-    const userExists = await apiResponse.json();
+    const userExistsDB = await apiResponse.json();
 
-    console.log(">>>>>");
-    console.log(userExists);
+    //Object { error: "No User found", user: null }
 
-    if (userExists.user !== null) {
+    if (!userExistsDB.error) {
       flagAllOK = false;
       setModalUser(true);
     }
@@ -55,7 +54,10 @@ export default function Register() {
       });
 
       const userSaved = await apiRespSave.json();
-      if (userSaved.id) {
+
+      console.log(userSaved);
+
+      if (userSaved.user.id) {
         setSaved(true);
         setTimeout(() => {
           router.push("/");

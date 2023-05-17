@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import EditModal from "/components/editModal";
 import DelModal from "/components/delModal";
 
@@ -17,78 +17,97 @@ export default function DashboardUser() {
   //User states
   const [logedUser, setLogedUser] = useState({});
   const [userTasks, setUserTasks] = useState([]);
+  const [usrIdTaskId, setUsrIdTaskId] = useState({});
 
   const router = useRouter();
 
   useEffect(() => {
     if (router.isReady) {
-      getUser(router.query.userId);
+      const usrId = router.query.userId;
+      setUsrIdTaskId(usrId);
+
+      async function getData() {
+        const user = await getUser(usrId);
+        setLogedUser(user);
+        const tasks = await getTasks(user.id);
+        setUserTasks(tasks);
+      }
+
+      getData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, router.query.userId]);
 
   useEffect(() => {
-    getTasks(logedUser.id);
+    getTasks(usrIdTaskId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModal, delModal]);
 
-  useEffect(() => {
-    getTasks(logedUser.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function toggleEditModal() {
+  async function toggleEditModal() {
     setEditModal(!editModal);
+    return;
   }
   function editingTask(task) {
     setEditTask(task);
     toggleEditModal();
+    return;
   }
 
   function toggleDelModal() {
     setDelModal(!delModal);
+    return;
   }
   async function removeTask(taskId) {
     setDelTaskId(taskId);
-    const content = userTasks.find((task) => task.id === taskId).content;
-    setDelTaskContent(content);
+    setDelTaskContent(userTasks.find((task) => task.id === taskId).content);
     toggleDelModal(true);
   }
 
-  async function getTasks() {
-    const apiResponse = await fetch(`/api/task/recOneUser/?${logedUser.id}`);
+  async function getTasks(user_Id) {
+    const apiResponse = await fetch(`/api/task/recOneUser/?userId=${user_Id}`);
+
     const tasksArray = await apiResponse.json();
     setUserTasks(tasksArray);
+    return tasksArray;
   }
+
   async function getUser(userId) {
     const apiResponse = await fetch(`/api/user/recoverId/?userId=${userId}`);
     const gotUser = await apiResponse.json();
-    setLogedUser(gotUser);
+    return gotUser;
   }
+
+  if (!Array.isArray(userTasks) || logedUser === undefined) return;
+  <h1>Loading... User</h1>;
 
   return (
     <div className={css.container}>
       <h1>
         DashBoard of <span className={css.userName}>{logedUser.name}</span>
       </h1>
-      {userTasks.map((task, index) => (
-        <div className={css.wrapp_cards} key={index}>
-          <div onClick={() => editingTask(task)}>
-            <Card admin={false} content={task.content} date={task.updatedAt} />
+      {Array.isArray(userTasks) &&
+        userTasks.map((task, index) => (
+          <div className={css.wrapp_cards} key={index}>
+            <div onClick={() => editingTask(task)}>
+              <Card
+                admin={false}
+                content={task.content}
+                date={task.updatedAt}
+              />
+            </div>
+            <div
+              onClick={() =>
+                router.push(`/dashOneFirm/${logedUser.id}/${task.firmId}`)
+              }
+              className={css.firm}
+            >
+              {task.firm.name}
+            </div>
+            <button onClick={() => removeTask(task.id)} className={css.btn_del}>
+              DELETE
+            </button>
           </div>
-          <div
-            onClick={() =>
-              router.push(`/dashOneFirm/${logedUser.id}/${task.firmId}`)
-            }
-            className={css.firm}
-          >
-            {task.firm.name}
-          </div>
-          <button onClick={() => removeTask(task.id)} className={css.btn_del}>
-            DELETE
-          </button>
-        </div>
-      ))}
+        ))}
+
       <div className={css.buttons}>
         <button
           className={css.submit_button}

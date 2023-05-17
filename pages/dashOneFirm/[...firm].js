@@ -35,7 +35,6 @@ export default function DashOneFirm() {
         const user = await getUser(usrId);
         setLogedUser(user);
         const firm = await getFirm(tskId);
-        console.log(firm, "<<<<<<<");
         setSelectedFirm(firm);
         const tasks = await getTasks(obj);
         setUserTasks(tasks);
@@ -62,6 +61,7 @@ export default function DashOneFirm() {
   function toggleDelModal() {
     setDelModal(!delModal);
   }
+
   function removeTask(taskId) {
     setDelTaskId(taskId);
     setDelTaskContent(userTasks.find((task) => task.id === taskId).content);
@@ -74,6 +74,7 @@ export default function DashOneFirm() {
       ContentType: "application/json",
       body: JSON.stringify(obj),
     });
+
     const tasksArray = await apiResponse.json();
     setUserTasks(tasksArray);
     return tasksArray;
@@ -88,7 +89,6 @@ export default function DashOneFirm() {
   async function getFirm(firmId) {
     const apiResponse = await fetch(`/api/firm/recId/?firmId=${firmId}`);
     const gotFirm = await apiResponse.json();
-    console.log("----------", gotFirm);
     return gotFirm;
   }
 
