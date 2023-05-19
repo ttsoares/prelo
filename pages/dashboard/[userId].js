@@ -6,8 +6,6 @@ import DelModal from "/components/delModal";
 import css from "./dashboard.module.css";
 import Card from "/components/card";
 
-import { BtnInput, BtnCancel } from "../../components/button/buttons";
-
 //------------------------------------- recebe user ID
 export default function DashboardUser() {
   const [editModal, setEditModal] = useState(false);
@@ -104,16 +102,22 @@ export default function DashboardUser() {
             >
               {task.firm.name}
             </div>
-
-            <BtnCancel fnc={() => removeTask(task.id)}>DELETE</BtnCancel>
+            <button onClick={() => removeTask(task.id)} className={css.btn_del}>
+              DELETE
+            </button>
           </div>
         ))}
 
       <div className={css.buttons}>
-        <BtnInput fnc={() => router.push(`/newTask/${logedUser.id}`)}>
+        <button
+          className={css.submit_button}
+          onClick={() => router.push(`/newTask/${logedUser.id}`)}
+        >
           New Task
-        </BtnInput>
-        <BtnCancel fnc={() => router.push("/")}>Log Out</BtnCancel>
+        </button>
+        <button className={css.cancel_button} onClick={() => router.push("/")}>
+          Log Out
+        </button>
       </div>
 
       {editModal && (

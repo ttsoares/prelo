@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-
 import css from "./firm.module.css";
 
-import { BtnInput, BtnCancel } from "../../components/button/buttons";
 //------------------------------
 export default function Firm() {
   const [firmName, setFirmName] = useState("");
@@ -50,13 +48,19 @@ export default function Firm() {
             value={firmName}
             onChange={(event) => setFirmName(event.target.value)}
             required
-            size="50"
           />
         </div>
         <div className={css.buttons}>
-          <BtnInput type="submit">Submit</BtnInput>
-
-          <BtnCancel fnc={() => router.push(`/dashboard/`)}>Cancel</BtnCancel>
+          <button className={css.submit_button} type="submit">
+            Submit
+          </button>
+          <button
+            className={css.cancel_button}
+            type="button"
+            onClick={() => router.push(`/dashboard/`)}
+          >
+            Cancel
+          </button>
         </div>
       </form>
       {saved && (

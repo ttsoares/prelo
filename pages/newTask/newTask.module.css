@@ -34,12 +34,27 @@
   font-weight: bold;
 }
 
-.h3 {
-  border: 1px white solid;
-  padding: 1rem 6rem;
-}
-
 .buttons {
   display: flex;
   justify-content: space-between;
+}
+
+.submit_button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cancel_button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #842f05;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
 }

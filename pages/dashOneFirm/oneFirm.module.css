@@ -65,3 +65,14 @@
   border-radius: 3px;
   cursor: pointer;
 }
+
+.btn_del {
+  padding: 5px 10px;
+  background-color: #842f05;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  height: 2rem;
+  margin-right: 4rem;
+}
