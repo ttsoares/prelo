@@ -6,6 +6,11 @@ import DelModal from "/components/delModal";
 import css from "./oneFirm.module.css";
 import Card from "/components/card";
 
+import {
+  BtnInput,
+  BtnRegister,
+  BtnCancel,
+} from "../../components/button/buttons";
 // Dashboard to one user and one firm
 //-------------------------------- get user ID and firm ID
 export default function DashOneFirm() {
@@ -110,31 +115,26 @@ export default function DashOneFirm() {
               />
             </div>
             <div className={css.firm}>{selectedFirm.name}</div>
-            <button onClick={() => removeTask(task.id)} className={css.btn_del}>
-              DELETE
-            </button>
+
+            <BtnCancel fnc={() => removeTask(task.id)}>DELETE</BtnCancel>
           </div>
         ))}
       <div className={css.buttons}>
-        <button
-          className={css.submit_button}
-          onClick={() =>
+        <BtnInput
+          fnc={() =>
             router.push(`/newTaskFirm/${logedUser.id}/${selectedFirm.name}`)
           }
         >
           New Task
-        </button>
-        <button
-          className={css.back_button}
-          onClick={() => router.push(`/dashboard/${logedUser.id}`)}
-        >
-          Back
-        </button>
-        <button className={css.cancel_button} onClick={() => router.push("/")}>
-          Log Out
-        </button>
-      </div>
+        </BtnInput>
 
+        <BtnRegister fnc={() => router.push(`/dashboard/${logedUser.id}`)}>
+          Back
+        </BtnRegister>
+
+        <BtnCancel fnc={() => router.push("/")}>Log Out</BtnCancel>
+      </div>
+      {/* --------------------------- */}
       {editModal && (
         <EditModal
           content={editTask.content}

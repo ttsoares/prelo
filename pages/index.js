@@ -7,6 +7,8 @@ import logo from "/public/imgs/logo2.png";
 import Head from "next/head";
 import css from "../styles/Home.module.css";
 
+import { BtnInput, BtnRegister } from "../components/button/buttons";
+
 //-------------------------------
 export default function Home() {
   const [userName, setUserName] = useState("");
@@ -78,18 +80,13 @@ export default function Home() {
                 required
               />
             </div>
-            <button className={css.input_button} type="submit">
-              Submit
-            </button>
+
+            <BtnInput type="submit">Submit</BtnInput>
           </form>
         </div>
-        <button
-          onClick={() => router.push("/register")}
-          className={css.register_button}
-          type="submit"
-        >
-          Register
-        </button>
+
+        <BtnRegister fnc={() => router.push("/register")}>Register</BtnRegister>
+
         <Image className={css.logo} src={logo} alt="Logo" />
         {modal && (
           <div className={css.modal}>

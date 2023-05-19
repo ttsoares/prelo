@@ -17,7 +17,9 @@
 }
 
 .input_label {
-  font-size: bold;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
 .input_input {
@@ -25,6 +27,7 @@
   border: 1px solid #ccc;
   border-radius: 3px;
   width: 90%;
+  font-size: 1.5rem;
 }
 
 .modal {
@@ -37,24 +40,4 @@
 .buttons {
   display: flex;
   justify-content: space-between;
-}
-
-.submit_button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #0070f3;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.cancel_button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #842f05;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
 }

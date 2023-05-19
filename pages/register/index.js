@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import md5 from "md5";
+import Button from "../../components/button/cancel";
 
 import css from "./register.module.css";
 
@@ -27,7 +28,6 @@ export default function Register() {
     let flagAllOK = true;
 
     await fetch(`/api/user/recoverName/?name=${userName}`).then((resp) => {
-      console.log(">.>.>.>", resp.status);
       if (resp.status === 200) {
         flagAllOK = false;
         setModalUser(true);
@@ -139,7 +139,6 @@ export default function Register() {
               <button className={css.submit_button} onClick={reset}>
                 Try again
               </button>
-
               <button
                 className={css.cancel_button}
                 onClick={() => router.push("/")}
