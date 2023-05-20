@@ -1,3 +1,5 @@
+import fetch from "cross-fetch";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import md5 from "md5";
@@ -6,6 +8,8 @@ import Image from "next/image";
 import logo from "/public/imgs/logo2.png";
 import Head from "next/head";
 import css from "../styles/Home.module.css";
+
+import { BtnInput, BtnRegister } from "../components/button/buttons";
 
 //-------------------------------
 export default function Home() {
@@ -18,7 +22,20 @@ export default function Home() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const apiResponse = await fetch(`/api/user/recoverName/?name=${userName}`);
+    async function getData() {
+      try {
+        const res = await fetch(`/api/user/recoverName/?name=${userName}`);
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        return res;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    const apiResponse = await getData();
     const userExists = await apiResponse.json();
 
     const hashInput = md5(password);
@@ -78,18 +95,13 @@ export default function Home() {
                 required
               />
             </div>
-            <button className={css.input_button} type="submit">
-              Submit
-            </button>
+
+            <BtnInput type="submit">Submit</BtnInput>
           </form>
         </div>
-        <button
-          onClick={() => router.push("/register")}
-          className={css.register_button}
-          type="submit"
-        >
-          Register
-        </button>
+
+        <BtnRegister fnc={() => router.push("/register")}>Register</BtnRegister>
+
         <Image className={css.logo} src={logo} alt="Logo" />
         {modal && (
           <div className={css.modal}>

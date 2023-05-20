@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import css from "./dashboard.module.css";
 import Card from "/components/card";
 
+import { BtnRegister, BtnCancel } from "../../components/button/buttons";
+
 //-----------------------------------
 export default function Dashboard() {
   const [allTasks, setAllTasks] = useState([]);
@@ -38,15 +40,9 @@ export default function Dashboard() {
         })}
       </div>
       <div className={css.buttons}>
-        <button
-          className={css.submit_button}
-          onClick={() => router.push("/newFirm")}
-        >
-          Firms
-        </button>
-        <button className={css.cancel_button} onClick={() => router.push("/")}>
-          Log Out
-        </button>
+        <BtnRegister fnc={() => router.push("/newFirm")}>New Firm</BtnRegister>
+
+        <BtnCancel fnc={() => router.push("/")}>Log Out</BtnCancel>
       </div>
     </>
   );

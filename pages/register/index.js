@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import md5 from "md5";
+import {
+  BtnInput,
+  BtnRegister,
+  BtnCancel,
+} from "../../components/button/buttons";
 
 import css from "./register.module.css";
 
@@ -27,7 +32,6 @@ export default function Register() {
     let flagAllOK = true;
 
     await fetch(`/api/user/recoverName/?name=${userName}`).then((resp) => {
-      console.log(">.>.>.>", resp.status);
       if (resp.status === 200) {
         flagAllOK = false;
         setModalUser(true);
@@ -107,9 +111,8 @@ export default function Register() {
                 required
               />
             </div>
-            <button className={css.submit_button} type="submit">
-              Submit
-            </button>
+
+            <BtnInput type="submit">Submit</BtnInput>
           </form>
         </div>
 
@@ -118,16 +121,9 @@ export default function Register() {
             <h3>Passwords not equal !</h3>
 
             <div className={css.buttons}>
-              <button className={css.submit_button} onClick={reset}>
-                Try again
-              </button>
+              <BtnRegister fnc={reset}>Try Again</BtnRegister>
 
-              <button
-                className={css.cancel_button}
-                onClick={() => router.push("/")}
-              >
-                Cancel
-              </button>
+              <BtnCancel fnc={() => router.push("/")}>Cancel</BtnCancel>
             </div>
           </div>
         )}
@@ -136,16 +132,9 @@ export default function Register() {
             <h3>Username already exists !</h3>
 
             <div className={css.buttons}>
-              <button className={css.submit_button} onClick={reset}>
-                Try again
-              </button>
+              <BtnRegister fnc={reset}>Try Again</BtnRegister>
 
-              <button
-                className={css.cancel_button}
-                onClick={() => router.push("/")}
-              >
-                Cancel
-              </button>
+              <BtnCancel fnc={() => router.push("/")}>Cancel</BtnCancel>
             </div>
           </div>
         )}

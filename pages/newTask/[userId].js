@@ -4,9 +4,11 @@ import { useRouter } from "next/router";
 
 import css from "./newTask.module.css";
 
+import { BtnInput, BtnCancel } from "../../components/button/buttons";
+
 //-------------------------------------- recebe userID
 export default function NewTask() {
-  const [selectedFirm, setSelectedFirm] = useState({ value: "", label: "" });
+  const [selectedFirm, setSelectedFirm] = useState({});
   const [taskCont, setTaskCont] = useState([]);
   const [optionsList, setOptionsList] = useState([]); //Para o Select
   const [logedUser, setLogedUser] = useState({});
@@ -20,23 +22,25 @@ export default function NewTask() {
     }
   }, [router.isReady, router.query.userId]);
 
-  const handleSubmit = async (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    const newTask = {
-      ownerId: logedUser.id,
-      content: taskCont,
-      firmId: selectedFirm.value,
-    };
+    if (selectedFirm.hasOwnProperty("value")) {
+      const newTask = {
+        ownerId: logedUser.id,
+        content: taskCont,
+        firmId: selectedFirm.value,
+      };
 
-    const apiRespSave = await fetch(`/api/task/create`, {
-      method: "POST",
-      ContentType: "application/json",
-      body: JSON.stringify(newTask),
-    });
+      await fetch(`/api/task/create`, {
+        method: "POST",
+        ContentType: "application/json",
+        body: JSON.stringify(newTask),
+      });
+    }
 
     router.push(`/dashboard/${logedUser.id}`);
-  };
+  }
 
   async function getUser(userId) {
     const apiResponse = await fetch(`/api/user/recoverId/?userId=${userId}`);
@@ -78,26 +82,22 @@ export default function NewTask() {
           <div className={css.select_container}>
             <Select
               options={optionsList}
-              placeholder="Choose a Firm"
               value={selectedFirm}
               onChange={handleSelect}
               isSearchable={true}
               className={css.select}
+              required={true}
+              defaultMenuIsOpen={true}
             />
           </div>
-          <h3>Choose a Firm</h3>
+          <h3 className={css.h3}>Choose a Firm</h3>
         </div>
         <div className={css.buttons}>
-          <button className={css.submit_button} type="submit">
-            Submit
-          </button>
-          <button
-            type="button"
-            className={css.cancel_button}
-            onClick={() => router.push(`/dashboard/${logedUser.id}`)}
-          >
+          <BtnInput type="submit">Submit</BtnInput>
+
+          <BtnCancel fnc={() => router.push(`/dashboard/${logedUser.id}`)}>
             Cancel
-          </button>
+          </BtnCancel>
         </div>
       </form>
     </div>

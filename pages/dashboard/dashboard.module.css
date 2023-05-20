@@ -12,7 +12,9 @@
   flex-direction: column;
   border: 1px yellow solid;
   width: 100%;
-  min-height: 600px;
+  /* min-height: 600px; */
+  max-height: 90vh;
+  overflow: scroll;
 }
 
 .userName {
@@ -48,6 +50,12 @@
 .buttons {
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  left: 1px;
+  bottom: 0;
+  width: 100%;
+  border: 2px yellow solid;
+  height: 10vh;
 }
 
 .submit_button {

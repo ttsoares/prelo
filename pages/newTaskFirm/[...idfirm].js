@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import css from "./newTaskFirm.module.css";
 
+import { BtnInput, BtnCancel } from "../../components/button/buttons";
 //-------------------------------------- receive user ID & firm name
 export default function NewTarkFirm() {
   const [taskCont, setTaskCont] = useState([]);
@@ -18,7 +19,7 @@ export default function NewTarkFirm() {
     }
   }, [router.isReady, router.query.idfirm]);
 
-  const handleSubmit = async (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
     const newTask = {
       ownerId: logedUser.id,
@@ -26,14 +27,14 @@ export default function NewTarkFirm() {
       firmId: selectedFirm.id,
     };
 
-    const apiRespSave = await fetch(`/api/task/create`, {
+    await fetch(`/api/task/create`, {
       method: "POST",
       ContentType: "application/json",
       body: JSON.stringify(newTask),
     });
 
     router.push(`/dashOneFirm/${logedUser.id}/${selectedFirm.id}`);
-  };
+  }
 
   async function getUser(userId) {
     const apiResponse = await fetch(`/api/user/recoverId/?userId=${userId}`);
@@ -64,18 +65,15 @@ export default function NewTarkFirm() {
           <div className={css.firmName}>{selectedFirm.name}</div>
         </div>
         <div className={css.buttons}>
-          <button className={css.submit_button} type="submit">
-            Submit
-          </button>
-          <button
-            type="button"
-            className={css.cancel_button}
-            onClick={() =>
+          <BtnInput type="submit">Submit</BtnInput>
+
+          <BtnCancel
+            fnc={() =>
               router.push(`/dashOneFirm/${logedUser.id}/${selectedFirm.id}`)
             }
           >
             Cancel
-          </button>
+          </BtnCancel>
         </div>
       </form>
     </div>
