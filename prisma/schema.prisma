@@ -1,16 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
@@ -24,12 +21,12 @@ model User {
 model Task {
   id        String   @id @default(uuid())
   content   String
-  owner     User     @relation(fields: [ownerId], references: [id])
   ownerId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  firm      Firm     @relation(fields: [firmId], references: [id])
   firmId    String
+  firm      Firm     @relation(fields: [firmId], references: [id])
+  owner     User     @relation(fields: [ownerId], references: [id])
 
   @@index([createdAt, updatedAt])
 }
@@ -44,4 +41,3 @@ enum Role {
   BASIC
   ADMIN
 }
-
