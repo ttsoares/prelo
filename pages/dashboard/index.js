@@ -9,18 +9,28 @@ import { BtnRegister, BtnCancel } from "../../components/button/buttons";
 //-----------------------------------
 export default function Dashboard() {
   const [allTasks, setAllTasks] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     getTasks();
-    const role = window.localStorage.key("user");
-    if (!role || role != "admin") return;
   }, []);
-  const router = useRouter();
 
   async function getTasks() {
     const apiResponse = await fetch(`/api/task/recAll`);
     const tasksArray = await apiResponse.json();
+    console.log(tasksArray);
     setAllTasks(tasksArray);
+  }
+
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    const role = localStorage.getItem("user");
+    if (!role || role != "admin") logOut();
+  }
+
+  function logOut() {
+    localStorage.removeItem("user");
+    router.push("/");
   }
 
   return (
@@ -43,7 +53,7 @@ export default function Dashboard() {
       <div className={css.buttons}>
         <BtnRegister fnc={() => router.push("/newFirm")}>New Firm</BtnRegister>
 
-        <BtnCancel fnc={() => router.push("/")}>Log Out</BtnCancel>
+        <BtnCancel fnc={logOut}>Log Out</BtnCancel>
       </div>
     </>
   );
