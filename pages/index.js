@@ -1,6 +1,6 @@
 import fetch from "cross-fetch";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import md5 from "md5";
 
@@ -47,6 +47,7 @@ export default function Home() {
       }, 3000);
     } else {
       if (userExists.role === "ADMIN") {
+        window.localStorage.setItem("user", "admin");
         router.push("/dashboard");
       } else {
         router.push(`/dashboard/${userExists.id}`);

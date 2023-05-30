@@ -12,8 +12,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     getTasks();
+    const role = window.localStorage.key("user");
+    if (!role || role != "admin") return;
   }, []);
-
   const router = useRouter();
 
   async function getTasks() {
