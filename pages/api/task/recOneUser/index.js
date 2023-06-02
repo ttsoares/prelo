@@ -10,7 +10,7 @@ export default async function handler(req, res) {
           ownerId: userId,
         },
         orderBy: {
-          updatedAt: "desc",
+          createdAt: "desc",
         },
         include: {
           firm: {
